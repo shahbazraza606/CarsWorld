@@ -32,7 +32,7 @@ const getcars = (req, res) => {
   const carsPerPage = 3;
 
   Car.find()
-    // .sort({ name: 1 })
+    //  .sort({ name: 1 })
     .skip(page * carsPerPage)
     .limit(carsPerPage)
     .then((cars) => {
@@ -44,6 +44,20 @@ const getcars = (req, res) => {
     });
 };
 
+
+const getcarchart = (req, res) => {
+  Car.find()
+    .sort({ name: 1 })
+    .then((cars) => {
+      
+
+      res.status(200).json({ message: "Here is the car info", cars: cars });
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({ error: 'Error In Fetching' });
+    });
+};
 
 const getcarbyid = (req, res) => {
   Car.findById(req.params.id)
@@ -74,7 +88,8 @@ const updatecar = (req, res) => {
     type: req.body.type,
     description: req.body.description,
     price: req.body.price,
-    image: req.file.filename,
+    
+    image:req.file ? req.file.filename : req.file
   };
   console.log(updatedCar);
 
@@ -111,7 +126,8 @@ module.exports = {
   getcarbyid,
   deletecar,
   updatecar,
-  findcar
+  findcar,
+  getcarchart
 };
 
 
